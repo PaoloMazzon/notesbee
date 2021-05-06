@@ -38,7 +38,7 @@ public class UpdateNotesActivity extends AppCompatActivity {
 
         // Pull note from the database
         try {
-            note = NoteList.getInstance().getNote(data.getIntExtra("noteIndex", NoteList.NOTELIST_NEW_NOTE));
+            note = NoteList.getInstance().getNote(index);
         } catch (Exception e) {
             System.out.println(e);
         }
