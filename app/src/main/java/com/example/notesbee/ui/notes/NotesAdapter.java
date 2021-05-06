@@ -53,7 +53,11 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
             public void onClick(View view) {
                 // code for deleting data for the passed index
                 Integer i= index.get(position);    //to get the passed index
-                ((NotesbeeApplication)((Activity)view.getContext()).getApplication()).getDatabase().remove(i);
+                try {
+                    NoteList.getInstance().remove(i);
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
 
                 Intent intent=new Intent(view.getContext(), MainActivity.class);
                 view.getContext().startActivity(intent);

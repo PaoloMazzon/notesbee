@@ -12,6 +12,7 @@ import com.example.notesbee.MainActivity;
 import com.example.notesbee.Note;
 import com.example.notesbee.NotesbeeApplication;
 import com.example.notesbee.R;
+import com.example.notesbee.ui.NoteList;
 
 import androidx.appcompat.app.AppCompatActivity;
 import jp.wasabeef.richeditor.RichEditor;
@@ -36,7 +37,11 @@ public class UpdateNotesActivity extends AppCompatActivity {
         Integer index=data.getIntExtra("index",0);
 
         // Pull note from the database
-        note = ((NotesbeeApplication)getApplication()).getDatabase().getNote(((NotesbeeApplication)getApplication()).getSelectedNoteIndex());
+        try {
+            note = NoteList.getInstance().getNote(data.getIntExtra("noteIndex", NoteList.NOTELIST_NEW_NOTE));
+        } catch (Exception e) {
+            System.out.println(e);
+        }
 
         // Save data to the database on clicking the save button
         findViewById(R.id.save_note_btn).setOnClickListener(view -> updateDataToDatabase(index));
@@ -109,8 +114,11 @@ public class UpdateNotesActivity extends AppCompatActivity {
      */
     private void updateDataToDatabase(Integer index){
         flushNote();
-        ((NotesbeeApplication)getApplication()).getDatabase().remove(index);
-        ((NotesbeeApplication)getApplication()).getDatabase().flush(getString(R.string.database_file));
+        try {
+            NoteList.getInstance().flush(getString(R.string.database_file));
+        } catch (Exception e) {
+            System.out.println(e);
+        }
         //((NotesbeeApplication)getApplication()).setSelectedNoteIndex(index);
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(intent);

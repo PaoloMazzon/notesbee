@@ -12,6 +12,8 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.notesbee.ui.NoteList;
+
 import java.lang.ref.WeakReference;
 import java.util.Calendar;
 import java.util.Date;
@@ -35,8 +37,13 @@ public class AddNotesActivity extends AppCompatActivity {
         ImageButton savenotes= findViewById(R.id.save_note_btn);
         savenotes.setOnClickListener(view -> addDataToDatabase());
         weakActivity = new WeakReference<>(this);
+
         // Pull note from the database
-        note = ((NotesbeeApplication)getApplication()).getDatabase().getNote(((NotesbeeApplication)getApplication()).getSelectedNoteIndex());
+        try {
+            note = NoteList.getInstance().getNote(getIntent().getIntExtra("noteIndex", NoteList.NOTELIST_NEW_NOTE));
+        } catch (Exception e) {
+            System.out.println(e);
+        }
 
         // Save data to the database on clicking the save button
         findViewById(R.id.save_note_btn).setOnClickListener(view -> addDataToDatabase());
@@ -130,7 +137,11 @@ public class AddNotesActivity extends AppCompatActivity {
 //            Toast.makeText(AddNotesActivity.this, "New Entry Not Inserted", Toast.LENGTH_SHORT).show();
 
         flushNote();
-        ((NotesbeeApplication)getApplication()).getDatabase().flush(getString(R.string.database_file));
+        try {
+            NoteList.getInstance().flush(getString(R.string.database_file));
+        } catch (Exception e) {
+            System.out.println(e);
+        }
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(intent);
     }

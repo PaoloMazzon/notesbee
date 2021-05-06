@@ -44,7 +44,12 @@ public class NotesFragment extends Fragment {
         List<String> content= new ArrayList<>();
         List<Boolean> alarmSet=new ArrayList<>();
         List<Integer> index=new ArrayList<>();
-        NoteList db = ((NotesbeeApplication)((Activity)getContext()).getApplication()).getDatabase();
+        NoteList db = null;
+        try {
+            db = NoteList.getInstance();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
         for (int i = 0; i < db.getNoteCount(); i++) {
             Note note = db.getNote(i);
             if(!note.title.isEmpty()) {
