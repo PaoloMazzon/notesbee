@@ -16,23 +16,16 @@ public class NoteList {
     // Array of notes
     private ArrayList<Note> notes;
     private Context context;
+    private static NoteList instance;
 
     // Used for getNote, if this is specified a new note is returned
     public static final int NOTELIST_NEW_NOTE = -1;
 
     /**
-     * Creates an empty note list
-     */
-    public NoteList(Context context) {
-        this.context = context;
-        notes = new ArrayList<Note>();
-    }
-
-    /**
      * Loads a note list from a file, returning an empty note list if the file doesn't exist
      * @param db File to load from, saved from flush()
      */
-    public NoteList(Context context, String db) {
+    private NoteList(Context context, String db) {
         notes = new ArrayList<Note>();
         this.context = context;
         StringBuilder fileString = new StringBuilder();
@@ -56,6 +49,23 @@ public class NoteList {
         } finally {
             // works on my machine
         }
+    }
+
+    /**
+     * Initializes the instance, call at the start of the program
+     * @param filename File to load from, saved from flush()
+     */
+    public static void initInstance(Context context, String filename) {
+        instance = new NoteList(context, filename);
+    }
+
+    /**
+    * Grabs the NoteList singleton, throwing if it hasn't been initialized
+    */
+    public static NoteList getInstance() throws InstantiationException {
+        if (instance != null)
+            return instance;
+        throw new InstantiationException("NoteList was never initialized");
     }
 
     /**
