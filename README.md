@@ -1,7 +1,7 @@
 Runtime Terrors
 ===============
 
-COMP370 group project from
+Project by
 
  + Ziana Kambere
  + Asmita Kotkar
